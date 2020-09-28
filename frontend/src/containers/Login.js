@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
+import { logIn } from '../Actions/Actions'
+import { connect } from 'react-redux'
+import { toast, ToastContainer } from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css"
 
-export class Login extends Component {
+class Login extends Component {
 
     state = {
         email: '',
@@ -30,17 +34,31 @@ export class Login extends Component {
 
         fetch('http://127.0.0.1:5000/login', options)
         .then(res => res.json())
+        .then(res => {
+            console.log(res)
+            return res
+        })
         // Store key in localStorage, used in protected API routes
-        .then(res => localStorage.setItem('token', res.token))
-        .then(res => console.log(localStorage.getItem('token')))
-        .then(console.log('success'))
+        //.then(res => localStorage.setItem('token', res.token))
+        .then(res => this.registerToken(res))
         // .then(res => {this.props.history.push('/dashboard')})
         .catch(err => console.warn("Something broke"))
+    }
+
+    registerToken = (res) => {
+        if (res.token) {
+            this.props.setLoggedIn()
+            localStorage.setItem('token', res.token)
+            toast.success("Login success")
+        } else {
+            toast.error("Invalid username or password")
+        }
     }
 
     render() {
         return (
             <div>
+                <ToastContainer />
                 <form onSubmit={this.handleSumbmit}>
                     <label htmlFor="email">Email</label>
                     <br/>
@@ -57,4 +75,8 @@ export class Login extends Component {
     }
 }
 
-export default Login;
+const mDTP = dispatch => ({
+    setLoggedIn: () => dispatch(logIn())
+})
+
+export default connect(null, mDTP)(Login);

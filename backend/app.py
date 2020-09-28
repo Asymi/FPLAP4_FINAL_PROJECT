@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, url_for
 from flask_cors import CORS
 from werkzeug import exceptions 
 from flask_sqlalchemy import SQLAlchemy
@@ -8,21 +8,15 @@ from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
     get_jwt_identity
 )
-
-
-
-
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
 app = Flask(__name__)
 
-# config = {
-#   'ORIGINS': [
-#     'http://localhost:5000',  
-#     'http://127.0.0.1:5000',  
-#   ]
-# }
+app.config.from_pyfile('config.cfg')
+mail=Mail(app)
 
-# CORS(app, resources={ r'/*': {'origins': config['ORIGINS']}}, supports_credentials=True)
+serialiser = URLSafeTimedSerializer('SECRET KEY')
+
 
 ENV = 'dev'
 if ENV == 'dev':
@@ -40,16 +34,6 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 CORS(app, resources={r"/*": {"origins": "*"}})
-
-
-# @app.after_request
-# def after_request(response):
-#   response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
-#   response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-#   response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-#   response.headers.add('Access-Control-Allow-Credentials', 'true')
-#   return response
-
 
 
 # User table
@@ -106,9 +90,6 @@ class Likes(db.Model):
         self.activity_id = activity_id
         
 
-
-
-
 # Routes
 @app.route('/')
 def home():
@@ -125,10 +106,70 @@ def sign_up():
         data = Users(username, password, email)
         db.session.add(data)
         db.session.commit()
+
+        # Email Verfication
+        print(email)
+        token = serialiser.dumps(email, salt='verify-email')
+        print(token)
+        link = url_for('confirm_email', token=token, _external=True)
+        msg = Message('Confirm Email', sender='anna.tran@getfutureproof.co.uk', recipients=[email])
+        msg.body = "Please verify your email address."
+        # return '<p>The email you have entered is {}'.format(email, token)
+
         # Send mail for later
         return jsonify({'message': 'Thanks for signing up!'})
     else:
-        return "Sign up"
+        return "Signup email confirmation unsuccessful"
+
+# POST Method??
+
+# def check_password(password):
+
+#     # Password should be 6 - 20 characters long
+#     # Password should contain at least one uppercase and one lowercase character
+#     # Password should contain at least one special symbol
+#     # Password should have at least one number
+
+#     special_characters = ['$', '@', '#', '%', ',', '/', '\'', '!', '&', '*']
+#     val = True
+
+#     if len(password) < 6:
+#         return('Password length should be at least 6')
+#         val = False
+#     if len(password) > 20:
+#         return('Password length should not be greater than 20')
+#         val = False
+#     if not any(char.isdigit() for char in password):
+#         return('Password should contain at least one number')
+#         val = False
+#     if not any(char.isupper() for char in password):
+#         return('Password should contain at least one uppercase character')
+#         val = False
+#     if not any(char.islower() for char in password):
+#         return('Password should contain at least one lowercase character')
+#         val = False
+#     if not any(char in special_characters for char in password):
+#         return('Password should contain at least one of the symbols !$%&*/\'!')
+#         val = False
+#     if val:
+#         return val
+
+# def password(pwd):
+#     password = pwd
+
+#     if(check_password(password)):
+#         return('Password is valid')
+#     else:
+#         return('Invalid password')    
+
+
+@app.route('/confirm_email/<token>')
+def confirm_email(token):
+    try: 
+        email = serialiser.loads(token, salt='verify-email', max_age=3000)
+    except SignatureExpired:
+        return 'This token has now expired.'
+    return 'The token works!'
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
