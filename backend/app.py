@@ -4,8 +4,10 @@ from werkzeug import exceptions
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import JWTManager
-from flask_jwt_extended import (create_access_token)
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token,
+    get_jwt_identity
+)
 
 
 
@@ -86,6 +88,7 @@ class Likes(db.Model):
     def __init__(self, user_id, activity_id):
         self.user_id = user_id
         self.activity_id = activity_id
+        
 
 
 
@@ -132,6 +135,12 @@ def login():
         else:
             result = jsonify({"error":"Invalid username or password"})
     return result
+
+@app.route('/profile', methods=['GET'])
+@jwt_required
+def profile():
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as = current_user), 200
 
 @app.route('/forgotpassword', methods=['GET', 'POST'])
 def forgot_password():
