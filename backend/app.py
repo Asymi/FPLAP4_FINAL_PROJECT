@@ -9,19 +9,39 @@ from flask_jwt_extended import (
     get_jwt_identity
 )
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from environs import Env
+import os
 
-app = Flask(__name__)
 
-app.config.from_pyfile('config.cfg')
-mail=Mail(app)
 
+
+# Makes a time sensitive key
 serialiser = URLSafeTimedSerializer('SECRET KEY')
 
 
+
+env = Env()
+env.read_env()
+app = Flask(__name__)
+
+
+
+
+# Mail configuration
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = env('EMAIL_USER')
+app.config['MAIL_PASSWORD'] = env('EMAIL_PASSWORD')
+mail = Mail(app)
+
+PG_USER = env('PG_USER')
+PG_PASSWORD = env('PG_PASSWORD')
 ENV = 'dev'
 if ENV == 'dev':
     app.debug = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Ch33seYB@localhost/travel'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{PG_USER}:{PG_PASSWORD}@localhost/travel'
 else:
     app.debug = False
     app.config['SQLALCHEMY_DATABASE_URI'] = ''

@@ -16,6 +16,7 @@ psycopg2-binary = "*"
 gunicorn = "*"
 flask-bcrypt = "*"
 flask-jwt-extended = "*"
+environs = "*"
 
 [requires]
 python_version = "3.8"
