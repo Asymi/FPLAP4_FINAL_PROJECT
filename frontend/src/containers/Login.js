@@ -50,6 +50,8 @@ class Login extends Component {
             this.props.setLoggedIn()
             localStorage.setItem('token', res.token)
             toast.success("Login success")
+        } else if (res.conf_error) {
+            toast.error("Please confirm email address before logging in")
         } else {
             toast.error("Invalid username or password")
         }

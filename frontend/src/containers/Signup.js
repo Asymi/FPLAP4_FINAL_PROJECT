@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { toast, ToastContainer } from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css"
 
 class Signup extends Component {
 
@@ -12,6 +14,9 @@ class Signup extends Component {
         const { name, value } = e.target;
         this.setState({ [name]: value })
     }
+
+    // validate length of pw and character content here
+    // Tell them to check their email if successful
 
     handleSumbmit = e => {
         e.preventDefault()
@@ -36,12 +41,22 @@ class Signup extends Component {
             console.log(res)
             return res
         })
+        .then(res => this.registerUser(res))
         .catch(err => console.warn("Something broke"))
+    }
+
+    registerUser = (res) => {
+        if (res.success) {
+            toast.success("Thanks for signing up. Please check your email to confirm your account.")
+        } else {
+            toast.error("That email is already in use, please choose another.")
+        }
     }
 
     render() {
         return (
             <div>
+                <ToastContainer />
                 <form onSubmit={this.handleSumbmit}>
                     <label htmlFor="username">Username</label>
                     <br/>

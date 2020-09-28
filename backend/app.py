@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, url_for
+from flask import Flask, request, jsonify, url_for, render_template
 from flask_cors import CORS
 from werkzeug import exceptions 
 from flask_sqlalchemy import SQLAlchemy
@@ -63,11 +63,13 @@ class Users(db.Model):
     username = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
     email = db.Column(db.String(100), unique=True)
+    confirmed = db.Column(db.Boolean)
 
-    def __init__(self, username, password, email):
+    def __init__(self, username, password, email, confirmed):
         self.username = username
         self.password = password
         self.email = email
+        self.confirmed = confirmed
 
 # Countries table
 class Countries(db.Model):
@@ -115,84 +117,55 @@ class Likes(db.Model):
 def home():
     return 'Hello'
 
+
 # Sending encrypted password???
 @app.route('/signup', methods=['GET','POST'])
 def sign_up():
     if request.method == 'POST':
-        # get_json() is used to get the body of a request
         username = request.get_json()['username']
         email = request.get_json()['email']
         password = bcrypt.generate_password_hash(request.get_json()['password']).decode('utf-8')
-        data = Users(username, password, email)
-        db.session.add(data)
-        db.session.commit()
+        
+        # Check if email is unique
+        if db.session.query(Users.email).filter(Users.email == email).count() == 0:
+            data = Users(username, password, email, False)
+            db.session.add(data)
+            db.session.commit()
 
-        # Email Verfication
-        print(email)
-        token = serialiser.dumps(email, salt='verify-email')
-        print(token)
-        link = url_for('confirm_email', token=token, _external=True)
-        msg = Message(subject='Confirm Your Email Address',
-                        sender=app.config.get('MAIL_USERNAME'),
-                        recipients=["yassine.benlamkadem@gmail.com"])
-        msg.body = f"Please verify your email address by clicking on the link: {link}"
-        mail.send(msg)
-        # return '<p>The email you have entered is {}'.format(email, token)
+            # Email Verfication
+            token = serialiser.dumps(email, salt='verify-email')
+            link = url_for('confirm_email', token=token, _external=True)
+            msg = Message(subject='Confirm Your Email Address',
+                            sender=app.config.get('MAIL_USERNAME'),
+                            recipients=["yassine.benlamkadem@gmail.com"])
+            msg.body = f"Please verify your email address by clicking on the link: {link}"
+            mail.send(msg)
+            # return '<p>The email you have entered is {}'.format(email, token)
 
-        # Send mail for later
-        return jsonify({'message': 'Thanks for signing up!'})
+            # Send mail for later
+            return jsonify({'success': 'Thanks for signing up!'})
+        else:
+            return jsonify({'failure': 'Email unavailable, please choose another'})
     else:
-        return "Signup email confirmation unsuccessful"
+        return "Signup route"
 
-# POST Method??
-
-# def check_password(password):
-
-#     # Password should be 6 - 20 characters long
-#     # Password should contain at least one uppercase and one lowercase character
-#     # Password should contain at least one special symbol
-#     # Password should have at least one number
-
-#     special_characters = ['$', '@', '#', '%', ',', '/', '\'', '!', '&', '*']
-#     val = True
-
-#     if len(password) < 6:
-#         return('Password length should be at least 6')
-#         val = False
-#     if len(password) > 20:
-#         return('Password length should not be greater than 20')
-#         val = False
-#     if not any(char.isdigit() for char in password):
-#         return('Password should contain at least one number')
-#         val = False
-#     if not any(char.isupper() for char in password):
-#         return('Password should contain at least one uppercase character')
-#         val = False
-#     if not any(char.islower() for char in password):
-#         return('Password should contain at least one lowercase character')
-#         val = False
-#     if not any(char in special_characters for char in password):
-#         return('Password should contain at least one of the symbols !$%&*/\'!')
-#         val = False
-#     if val:
-#         return val
-
-# def password(pwd):
-#     password = pwd
-
-#     if(check_password(password)):
-#         return('Password is valid')
-#     else:
-#         return('Invalid password')    
 
 
 @app.route('/confirm_email/<token>')
 def confirm_email(token):
     try: 
-        email = serialiser.loads(token, salt='verify-email', max_age=3000)
+        email = serialiser.loads(token, salt='verify-email', max_age=3600)
+        # Update database to mark email as confirmed
+        user = db.session.query(Users).filter(Users.email == email).first()
+        user.confirmed = True
+        db.session.commit()
+        print(email)
     except SignatureExpired:
-        return 'This token has now expired.'
-    return 'The token works!'
+        # return '<p>The e
+        return render_template('expired.html')
+    return render_template('confirmed.html')
+
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -202,28 +175,37 @@ def login():
 
         # Validating email to see if it exists in database
         if db.session.query(Users.email).filter(Users.email == email).count() == 1:
-            # Get user data from database to create identity
-            hashed_password = db.session.query(Users.password).filter(Users.email == email).first()[0]
-            email = db.session.query(Users.email).filter(Users.email == email).first()[0]
-            username = db.session.query(Users.username).filter(Users.email == email).first()[0]
+            
+            # Validate email is confirmed
+            if db.session.query(Users.confirmed).filter(Users.email == email).first()[0] == True:
+                # Get user data from database to create identity
+                hashed_password = db.session.query(Users.password).filter(Users.email == email).first()[0]
+                email = db.session.query(Users.email).filter(Users.email == email).first()[0]
+                username = db.session.query(Users.username).filter(Users.email == email).first()[0]
 
-            if bcrypt.check_password_hash(hashed_password, password):
-                access_token = create_access_token(identity = {
-                    'username': username,
-                    'email': email
-                })
-                result = jsonify({'token': access_token})
-                # result = jsonify({"success":"Successful login"})
-            else:
-                result = jsonify({"error":"Invalid username or password"})
+                if bcrypt.check_password_hash(hashed_password, password):
+                    access_token = create_access_token(identity = {
+                        'username': username,
+                        'email': email
+                    })
+                    result = jsonify({'token': access_token})
+                    # result = jsonify({"success":"Successful login"})
+                else:
+                    result = jsonify({"error":"Invalid username or password"})
+            else: 
+                result = jsonify({"conf_error":"Please confirm email address before logging in"})
         else: result = jsonify({"error":"Invalid username or password"})
     return result
+
+
 
 @app.route('/profile', methods=['GET'])
 @jwt_required
 def profile():
     current_user = get_jwt_identity()
     return jsonify(logged_in_as = current_user), 200
+
+
 
 @app.route('/forgotpassword', methods=['GET', 'POST'])
 def forgot_password():
