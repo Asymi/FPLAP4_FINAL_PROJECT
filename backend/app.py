@@ -14,7 +14,15 @@ from flask_jwt_extended import (
 
 
 app = Flask(__name__)
-CORS(app)
+
+# config = {
+#   'ORIGINS': [
+#     'http://localhost:5000',  
+#     'http://127.0.0.1:5000',  
+#   ]
+# }
+
+# CORS(app, resources={ r'/*': {'origins': config['ORIGINS']}}, supports_credentials=True)
 
 ENV = 'dev'
 if ENV == 'dev':
@@ -31,8 +39,16 @@ app.config['JWT_SECRET_KEY'] = 'secret'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 
+# @app.after_request
+# def after_request(response):
+#   response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+#   response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+#   response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+#   response.headers.add('Access-Control-Allow-Credentials', 'true')
+#   return response
 
 
 
@@ -120,20 +136,23 @@ def login():
         email = request.get_json()['email']
         password = request.get_json()['password']
 
-        # Get user data from database to create identity
-        hashed_password = db.session.query(Users.password).filter(Users.email == email).first()[0]
-        email = db.session.query(Users.email).filter(Users.email == email).first()[0]
-        username = db.session.query(Users.username).filter(Users.email == email).first()[0]
+        # Validating email to see if it exists in database
+        if db.session.query(Users.email).filter(Users.email == email).count() == 1:
+            # Get user data from database to create identity
+            hashed_password = db.session.query(Users.password).filter(Users.email == email).first()[0]
+            email = db.session.query(Users.email).filter(Users.email == email).first()[0]
+            username = db.session.query(Users.username).filter(Users.email == email).first()[0]
 
-        if bcrypt.check_password_hash(hashed_password, password):
-            access_token = create_access_token(identity = {
-                'username': username,
-                'email': email
-            })
-            result = access_token
-            # result = jsonify({"success":"Successful login"})
-        else:
-            result = jsonify({"error":"Invalid username or password"})
+            if bcrypt.check_password_hash(hashed_password, password):
+                access_token = create_access_token(identity = {
+                    'username': username,
+                    'email': email
+                })
+                result = jsonify({'token': access_token})
+                # result = jsonify({"success":"Successful login"})
+            else:
+                result = jsonify({"error":"Invalid username or password"})
+        else: result = jsonify({"error":"Invalid username or password"})
     return result
 
 @app.route('/profile', methods=['GET'])
