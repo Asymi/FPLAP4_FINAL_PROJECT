@@ -132,8 +132,11 @@ def sign_up():
         token = serialiser.dumps(email, salt='verify-email')
         print(token)
         link = url_for('confirm_email', token=token, _external=True)
-        msg = Message('Confirm Email', sender='anna.tran@getfutureproof.co.uk', recipients=[email])
-        msg.body = "Please verify your email address."
+        msg = Message(subject='Confirm Your Email Address',
+                        sender=app.config.get('MAIL_USERNAME'),
+                        recipients=["yassine.benlamkadem@gmail.com"])
+        msg.body = f"Please verify your email address by clicking on the link: {link}"
+        mail.send(msg)
         # return '<p>The email you have entered is {}'.format(email, token)
 
         # Send mail for later
