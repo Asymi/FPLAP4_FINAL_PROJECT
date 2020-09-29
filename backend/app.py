@@ -315,6 +315,10 @@ def unlike_activity():
     db.session.commit()
     return jsonify({"message": "Activity removed from user's likes successfuly"})
 
-
+# STILL TO DO
+# Add admin users and first user since db was dropped
+# Route to populate countries table
+# Route for countries/countryslug, basically filter activities by country
+# Route for countries/countryslug/categoryslug, basically filter activities by country then filter by category
 if __name__ == '__main__':
     app.run(debug=True)
