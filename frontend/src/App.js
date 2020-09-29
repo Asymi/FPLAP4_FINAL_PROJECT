@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Switch, Route, Link } from 'react-router-dom'
-import { Activities, Categories, Dashboard, Login, Signup, Landing, About, Covid19 } from './containers'
+import { Switch, Route, Link, Router } from 'react-router-dom'
+import { Activities, Categories, Dashboard, Login, Signup, Landing, About, Covid19, ForgotPassword } from './containers'
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NavBar from './components/NavBar'
@@ -22,6 +22,7 @@ class App extends Component{
           <Route path='/dashboard' component={Dashboard}/>
           <Route path='/login' component={Login}/>
           <Route path='/signup' component={Signup}/>
+          <Route path='/forgot' component={ForgotPassword}/>
           <Route path='/covid' component={Covid19}/>
         </Switch>
         <footer>

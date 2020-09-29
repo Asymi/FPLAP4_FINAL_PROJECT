@@ -121,6 +121,8 @@ class Likes(db.Model):
         self.activity_id = activity_id
         
 
+
+
 # Routes
 @app.route('/')
 def home():
@@ -156,7 +158,7 @@ def sign_up():
         else:
             return jsonify({'failure': 'Email unavailable, please choose another'})
     else:
-        return "Signup route"
+        return jsonify({"message":"Signup route"})
 
 
 
@@ -206,16 +208,7 @@ def login():
     return result
 
 
-# User profile route, protected
-@app.route('/profile', methods=['GET'])
-@jwt_required
-def profile():
-    current_user = get_jwt_identity()
-    return jsonify(logged_in_as = current_user), 200
 
-
-# Will take imput of an email address, send confirmation link to it, 
-# Confirmation link opens a password reset page (validation), then update database accordingly
 @app.route('/forgot_password', methods=['POST'])
 def forgot_password():
     if request.method == 'POST':
@@ -231,8 +224,7 @@ def forgot_password():
         return jsonify({"message": "Password reset link sent"})
 
 
-
-# Render a form to reset password, include validations
+# Include password validations later
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     email = serialiser.loads(token, salt='reset-password', max_age=3600)
