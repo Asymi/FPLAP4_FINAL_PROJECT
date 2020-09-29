@@ -146,7 +146,7 @@ def sign_up():
             link = url_for('confirm_email', token=token, _external=True)
             msg = Message(subject='Confirm Your Email Address',
                             sender=app.config.get('MAIL_USERNAME'),
-                            recipients=[email])
+                            recipients=["yassine.benlamkadem@gmail.com"])
             msg.body = f"Please verify your email address by clicking on the link: {link}"
             mail.send(msg)
             # return '<p>The email you have entered is {}'.format(email, token)
@@ -240,8 +240,7 @@ def reset_password(token):
     
     if request.method == 'POST':
         # Get new password from form and encrypt it
-        password = form.password.data
-        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
 
         user = db.session.query(Users).filter(Users.email == email).first()
         user.password = hashed_password
