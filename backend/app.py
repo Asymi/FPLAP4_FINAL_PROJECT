@@ -36,6 +36,9 @@ app.config['MAIL_USERNAME'] = env('EMAIL_USER')
 app.config['MAIL_PASSWORD'] = env('EMAIL_PASSWORD')
 mail = Mail(app)
 
+
+
+
 PG_USER = env('PG_USER')
 PG_PASSWORD = env('PG_PASSWORD')
 ENV = 'dev'
@@ -49,6 +52,9 @@ else:
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'secret'
 
+
+
+
 # Initialisation
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
@@ -56,11 +62,13 @@ jwt = JWTManager(app)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 
+
+
 # User table
 class Users(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True)
+    username = db.Column(db.String(100))
     password = db.Column(db.String(100))
     email = db.Column(db.String(100), unique=True)
     confirmed = db.Column(db.Boolean)
@@ -137,7 +145,7 @@ def sign_up():
             link = url_for('confirm_email', token=token, _external=True)
             msg = Message(subject='Confirm Your Email Address',
                             sender=app.config.get('MAIL_USERNAME'),
-                            recipients=["yassine.benlamkadem@gmail.com"])
+                            recipients=[email])
             msg.body = f"Please verify your email address by clicking on the link: {link}"
             mail.send(msg)
             # return '<p>The email you have entered is {}'.format(email, token)
