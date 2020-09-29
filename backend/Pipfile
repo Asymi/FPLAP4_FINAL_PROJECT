@@ -17,6 +17,7 @@ gunicorn = "*"
 flask-bcrypt = "*"
 flask-jwt-extended = "*"
 environs = "*"
+wtforms = "*"
 
 [requires]
 python_version = "3.8"

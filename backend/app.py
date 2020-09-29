@@ -10,6 +10,7 @@ from flask_jwt_extended import (
 )
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from environs import Env
+from forms import ResetPasswordForm
 import os
 
 
@@ -167,7 +168,6 @@ def confirm_email(token):
         user = db.session.query(Users).filter(Users.email == email).first()
         user.confirmed = True
         db.session.commit()
-        print(email)
     except SignatureExpired:
         # return '<p>The e
         return render_template('expired.html')
@@ -206,7 +206,7 @@ def login():
     return result
 
 
-
+# User profile route, protected
 @app.route('/profile', methods=['GET'])
 @jwt_required
 def profile():
@@ -214,10 +214,42 @@ def profile():
     return jsonify(logged_in_as = current_user), 200
 
 
-
-@app.route('/forgotpassword', methods=['GET', 'POST'])
+# Will take imput of an email address, send confirmation link to it, 
+# Confirmation link opens a password reset page (validation), then update database accordingly
+@app.route('/forgot_password', methods=['POST'])
 def forgot_password():
-    return 'Forgot password!'
+    if request.method == 'POST':
+        email = request.get_json()['email']
+
+        token = serialiser.dumps(email, salt='reset-password')
+        link = url_for('reset_password', token=token, _external=True)
+        msg = Message(subject='Reset Your Password',
+                        sender=app.config.get('MAIL_USERNAME'),
+                        recipients=["yassine.benlamkadem@gmail.com"])
+        msg.body = f"You are recieving this email because you requested to reset your password on. Click the link below to reset your password. If you did not request this, please ignore this message. {link}"
+        mail.send(msg)
+        return jsonify({"message": "Password reset link sent"})
+
+
+
+# Render a form to reset password, include validations
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    email = serialiser.loads(token, salt='reset-password', max_age=3600)
+    form = ResetPasswordForm(request.form)
+    
+    if request.method == 'POST':
+        # Get new password from form and encrypt it
+        password = form.password.data
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+        user = db.session.query(Users).filter(Users.email == email).first()
+        user.password = hashed_password
+        db.session.commit()
+        return render_template('reset_confirm.html')
+    else:
+        return render_template('reset.html', form=form, token=token)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
