@@ -1,0 +1,9 @@
+.balloon {
+    width: 98vw;
+    opacity: 0.4;
+}
+
+.about-headers {
+    position: absolute;
+    top: 20%;
+}
