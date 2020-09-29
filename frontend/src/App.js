@@ -2,11 +2,18 @@ import React, { Component } from 'react';
 import { Switch, Route, Link, Router } from 'react-router-dom'
 import { Activities, Categories, Dashboard, Login, Signup, Landing, About, Covid19, ForgotPassword } from './containers'
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { connect } from 'react-redux'
+import { logIn } from './Actions/Actions'
 import NavBar from './components/NavBar'
 import './App.css'
 
 class App extends Component{
+  componentDidMount(){
+    if(localStorage.token){
+      this.props.setLoggedIn()
+    }
+  }
   render() {
     return (
       <div className="App">
@@ -34,4 +41,8 @@ class App extends Component{
   
 }
 
-export default App;
+const mDTP = dispatch => ({
+    setLoggedIn: () => dispatch(logIn())
+})
+
+export default connect(null, mDTP)(App);
