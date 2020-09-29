@@ -93,6 +93,7 @@ class Countries(db.Model):
 class Activities(db.Model):
     __tablename__ = 'activities'
     id = db.Column(db.Integer, primary_key=True)
+    country_id = db.Column(db.Integer)
     name = db.Column(db.String(200))
     category = db.Column(db.String(200))
     opening_hours = db.Column(db.String(200))
@@ -101,7 +102,8 @@ class Activities(db.Model):
     address = db.Column(db.String(300))
     phone_number = db.Column(db.String(30))
     
-    def __init__(self, name, category, opening_hours, price, provider, address, phone_number):
+    def __init__(self, country_id, name, category, opening_hours, price, provider, address, phone_number):
+        self.country_id = country_id
         self.name = name
         self.category = category
         self.opening_hours = opening_hours
@@ -276,8 +278,8 @@ def add_activity():
     email = current_user['email']
 
     if email == 'fplap4project@gmail.com':
-        name, category, opening_hours, price, provider, address, phone_number = request.get_json()['name'], request.get_json()['category'], request.get_json()['opening_hours'], request.get_json()['price'], request.get_json()['provider'], request.get_json()['address'], request.get_json()['phone_number']
-        data = Activities(name, category, opening_hours, price, provider, address, phone_number)
+        country_id, name, category, opening_hours, price, provider, address, phone_number = request.get_json()['country_id'], request.get_json()['name'], request.get_json()['category'], request.get_json()['opening_hours'], request.get_json()['price'], request.get_json()['provider'], request.get_json()['address'], request.get_json()['phone_number']
+        data = Activities(country_id, name, category, opening_hours, price, provider, address, phone_number)
         db.session.add(data)
         db.session.commit()
         return jsonify({"message":"Activity added successfully"})
@@ -312,6 +314,7 @@ def unlike_activity():
     db.session.query(Likes).filter(Likes.user_id == user_id).filter(Likes.activity_id == activity_id).delete(synchronize_session=False)
     db.session.commit()
     return jsonify({"message": "Activity removed from user's likes successfuly"})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
