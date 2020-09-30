@@ -271,7 +271,7 @@ def dashboard():
     
     response = {
         "username": username,
-        "user_activities":user_activities
+        "user_activities": user_activities
     }
     return jsonify(response), 200
 
