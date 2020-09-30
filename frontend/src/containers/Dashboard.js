@@ -1,27 +1,38 @@
 import React, { Component } from 'react'
 
 export class Dashboard extends Component {
-
-
-    fetchUsername = () => {
-        const options = {
-            method: 'GET'
-        }
-
-        fetch('http://localhost:5000/login', options)
-            .then(res => console.log(res.json()))
-            .then(data => 
-                <h1>{data.username}</h1>
-            )
-            .catch(err => console.warn('Error. Username not fetched'))
+    state = {
+        username: ""
     }
 
-    render() {
+    token = localStorage.getItem('token')
 
+    componentDidMount(){
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + this.token
+            }
+        }
+
+        fetch('http://127.0.0.1:5000/dashboard', options)
+            .then(res => {
+                return res.json()
+            })
+            .then(data => {
+                {this.setState({username: data.username})}
+                return data.username
+            })
+            .catch(err => console.warn('Username not printed'))
+    }
+
+
+    render() {
         return (
             <div className="dashboard-container">
-                {this.fetchUsername}
                 <div className="saved-container">
+                <h1>Hi {this.state.username}</h1>
                 <h2>Saved Activities</h2>
                     <div className="saved-cards">
                         {/* IMPORT SAVED ACTIVITIES */}
