@@ -1,4 +1,4 @@
-import { Redirect } from 'react-router-dom'
+// import { Redirect } from 'react-router-dom'
 import { createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
