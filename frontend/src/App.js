@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
-import { Activities, Categories, Dashboard, Login, Signup, Landing, About, Covid19 } from './containers'
+import { Activities, Categories, Dashboard, Login, Signup, Landing, About, Covid19, ForgotPassword } from './containers'
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NavBar from './components/NavBar'
@@ -11,7 +11,7 @@ class App extends Component{
     return (
       <div className="App">
         <div className="logo-icon">
-            <Link to='/'><FontAwesomeIcon icon={faMapMarkerAlt}/>Trip Planner</Link>
+            <Link to='/'><FontAwesomeIcon icon={faMapMarkerAlt}/>Find-Do</Link>
         </div>
         <NavBar></NavBar>
         <Switch>
@@ -23,9 +23,10 @@ class App extends Component{
           <Route path='/login' component={Login}/>
           <Route path='/signup' component={Signup}/>
           <Route path='/covid' component={Covid19}/>
+          <Route path='/forgotpassword' component={ForgotPassword}/>
         </Switch>
         <footer>
-          &copy; 2020 APP NAME All rights reserved.
+          &copy; 2020 Find-Do All rights reserved.
         </footer>
       </div>
     )
