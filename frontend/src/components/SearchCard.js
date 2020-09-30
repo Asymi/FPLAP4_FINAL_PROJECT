@@ -28,6 +28,7 @@ class SearchCard extends Component {
             suggestions: []
         }))
         this.props.history.push(`/countries/${value}`)
+        this.setState({text: ""})
     }
 
     renderSuggestions = () => {
@@ -37,42 +38,14 @@ class SearchCard extends Component {
         }
         return (
             <div>
-                {/* <span>Suggestions({suggestions.length})</span> */}
                 <ul>
                     {suggestions.slice(0, 5).map((item, index) => (
-                        <li key={index} onClick={() => this.selectedText(item)}>{item}</li>
+                        <li key={index} onClick={() => this.selectedText(item)} className="country-list">{item}</li>
                     ))}
                 </ul>
             </div>
         )
     }
-    // state = {
-    //     showForm: false,
-    //     input: "",
-    //     visibility: 'visible'
-    // }
-
-
-    // handleSubmit = e => {
-    //     e.preventDefault()
-    // }
-
-    // handleInput = e => {
-    //     const { name, value } = e.target;
-    //     this.setState({ [name]: value })
-    //     // this.setState({input: e.target.searchbar.value})
-    //     console.log(this.state.input)
-    // }
-
-    // showForm = () => {
-    //     return (
-    //         <form id="search-form" onSubmit={this.handleSubmit}>
-    //             <input onChange={this.handleInput} type="text" placeholder="Search by Country" name="
-    //             searchbar"></input>
-    //         </form>
-    //     )
-    // }
-
 
     render() {
         const { text } = this.state
@@ -81,11 +54,6 @@ class SearchCard extends Component {
             <div>
                 <input type="text" onChange={this.onInputChange} value={text} placeholder="Search by Country"/>
                 {this.renderSuggestions()}
-                {/* <SearchCard data={this.state.text}/> */}
-                {/* <SearchResult data={this.state.text}/> */}
-                {/* HIDE BUTTON AFTER CLICK
-                <button onClick={() => this.setState({showForm: true})} >Search</button>
-                {this.state.showForm ? this.showForm() : null} */}
             </div>
         )
     }
