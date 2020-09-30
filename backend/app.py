@@ -122,6 +122,8 @@ class Likes(db.Model):
     def __init__(self, user_id, activity_id):
         self.user_id = user_id
         self.activity_id = activity_id
+
+# Categories tables
         
 
 
@@ -349,7 +351,10 @@ def countries():
 
     return jsonify(send_countries)
 
+
 # Route for countries/countryslug, basically filter activities by country
+@app.route('/countries/<country>')
+def country_activities():
 
 
 # Route for countries/countryslug/categoryslug, basically filter activities by country then filter by category
