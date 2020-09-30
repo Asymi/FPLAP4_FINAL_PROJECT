@@ -3,19 +3,13 @@ import { withRouter } from 'react-router-dom'
 import Card from 'react-bootstrap/Card'
 import ListGroup from 'react-bootstrap/ListGroup'
 
-class Results extends Component{
+class ActivityResults extends Component{
 
 
     render(){
  
         const allData = this.props.results.map((item, idx) =>
             <div key={idx} className="activity-container">
-                <h2 className="title">{item.name}</h2>
-                <h2 className="streak">Streak: {item.count}</h2>
-                <ProgressCard id={item.id} frequency={item.frequency} disable={item.disable}/><br></br>
-                <Button id={item.id} disable={item.disable} ></Button>   
-                <ReverseButton id={item.id}></ReverseButton>
-
                 <Card style={{ width: '18rem' }}>
                     <Card.Img variant="top" src="holder.js/100px180?text=Image" />
                     <Card.Body>

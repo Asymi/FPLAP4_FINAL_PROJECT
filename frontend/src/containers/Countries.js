@@ -8,7 +8,6 @@ import ActivityCard from '../components/ActivityCard'
 class Activities extends Component {
 
     state = {
-        chosenCountry: 'kiribati',
         countryName: '',
         capital: '',
         callingCode: '',
@@ -24,6 +23,23 @@ class Activities extends Component {
     };
     
     componentDidMount() {
+        // const countryURL = `https://restcountries.eu/rest/v2/name/${this.state.chosenCountry}`;
+        const countryURL = `https://restcountries.eu/rest/v2/name/${this.props.match.params.slug}`;
+        fetch(countryURL)
+            .then((r) => r.json())
+            .then(country => {this.setState({
+                countryName: country[0].name,
+                capital: country[0].capital,
+                callingCode: country[0].callingCodes,
+                currency: country[0].currencies[0].name,
+                currencySymbol: country[0].currencies[0].symbol,
+                language: country[0].languages[0].name,
+                flag: country[0].flag
+            })})
+            .catch(err => console.warn('Country not found!', err))
+    }
+
+    componentDidUpdate() {
         // const countryURL = `https://restcountries.eu/rest/v2/name/${this.state.chosenCountry}`;
         const countryURL = `https://restcountries.eu/rest/v2/name/${this.props.match.params.slug}`;
         fetch(countryURL)

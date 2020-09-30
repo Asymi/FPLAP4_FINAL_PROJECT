@@ -1,12 +1,5 @@
 import React, { Component } from 'react'
 
-<<<<<<< HEAD
-export class ForgotPassword extends Component {
-    render() {
-        return (
-            <div>
-                
-=======
 class ForgotPassword extends Component {
     
     state = {
@@ -53,14 +46,9 @@ class ForgotPassword extends Component {
                     <br />
                     <input type="submit"></input>
                 </form>
->>>>>>> 7e842961527913c1cfc16808ad731f01db2052b6
             </div>
         )
     }
 }
 
-<<<<<<< HEAD
 export default ForgotPassword
-=======
-export default ForgotPassword
->>>>>>> 7e842961527913c1cfc16808ad731f01db2052b6
