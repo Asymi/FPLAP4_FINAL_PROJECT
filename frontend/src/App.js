@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Route, Link } from 'react-router-dom'
-import { Activities, Categories, Dashboard, Login, Signup, Landing, About, Covid19, ForgotPassword } from './containers'
+import { Countries, Categories, Dashboard, Login, Signup, Landing, About, Covid19, ForgotPassword } from './containers'
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux'
@@ -25,7 +25,7 @@ class App extends Component{
         <Switch>
           <Route exact path='/' component={Landing}/>
           <Route path='/about' component={About}/>
-          <Route path='/activities' component={Activities}/>
+          <Route path='/countries/:slug' component={Countries}/> 
           <Route path='/categories' component={Categories}/>
           <Route path='/dashboard' component={Dashboard}/>
           <Route path='/login' component={Login}/>
