@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import { logIn } from '../Actions/Actions'
 import { connect } from 'react-redux'
 import { toast, ToastContainer } from 'react-toastify'
@@ -67,6 +68,7 @@ class Login extends Component {
                     <br/>
                     <input type="submit" value="login"></input>
                 </form>
+                <p>Not registered?</p><Link to="/signup">Sign up</Link>
             </div>
         )
     }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
 
@@ -72,6 +73,7 @@ class Signup extends Component {
                     <br/>
                     <input type="submit" value="Sign Up"></input>
                 </form>
+                <p>Already have an account?</p><Link to="/login">Log in</Link>
             </div>
         )
     }

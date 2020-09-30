@@ -137,6 +137,7 @@ def home():
 def sign_up():
     if request.method == 'POST':
         username = request.get_json()['username']
+        # print(username)
         email = request.get_json()['email']
         password = bcrypt.generate_password_hash(request.get_json()['password']).decode('utf-8')
         
@@ -151,15 +152,15 @@ def sign_up():
             link = url_for('confirm_email', token=token, _external=True)
             msg = Message(subject='Confirm Your Email Address',
                             sender=app.config.get('MAIL_USERNAME'),
-                            recipients=["yassine.benlamkadem@gmail.com"])
+                            recipients=["anna_tran@hotmail.co.uk"])
             msg.body = f"Please verify your email address by clicking on the link: {link}"
             mail.send(msg)
         
             return jsonify({'success': 'Thanks for signing up!'})
         else:
             return jsonify({'failure': 'Email unavailable, please choose another'})
-    else:
-        return jsonify({"message":"Signup route"})
+
+    return jsonify({"message": 'signup' })
 
 
 
@@ -217,7 +218,7 @@ def forgot_password():
         link = url_for('reset_password', token=token, _external=True)
         msg = Message(subject='Reset Your Password',
                         sender=app.config.get('MAIL_USERNAME'),
-                        recipients=["yassine.benlamkadem@gmail.com"])
+                        recipients=["anna_tran@hotmail.co.uk"])
         msg.body = f"You are recieving this email because you requested to reset your password on. Click the link below to reset your password. If you did not request this, please ignore this message. {link}"
         mail.send(msg)
         return jsonify({"message": "Password reset link sent"})
