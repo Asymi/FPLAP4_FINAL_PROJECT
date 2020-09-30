@@ -25,7 +25,8 @@ class App extends Component{
         <Switch>
           <Route exact path='/' component={Landing}/>
           <Route path='/about' component={About}/>
-          <Route path='/activities' component={Activities}/> 
+          {/* <Route path='/activities' component={Activities}/>  */}
+          <Route path='/activities/:slug' component={Activities}/> 
           <Route path='/categories' component={Categories}/>
           <Route path='/dashboard' component={Dashboard}/>
           <Route path='/login' component={Login}/>

@@ -1,21 +1,29 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { withRouter, Link } from 'react-router-dom'
 import WarningText from '../components/WarningText'
 
 class Activities extends Component {
 
     state = {
-        chosenCountry: 'algeria',
+        chosenCountry: 'kiribati',
         countryName: '',
         capital: '',
         callingCode: '',
         timezone: '',
         currency: '',
         languages: '',
-    }
+    };
+
+    static propTypes = {
+        match: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired,
+    };
     
     componentDidMount() {
-        const countryURL = `https://restcountries.eu/rest/v2/name/${this.state.chosenCountry}`;
+        // const countryURL = `https://restcountries.eu/rest/v2/name/${this.state.chosenCountry}`;
+        const countryURL = `https://restcountries.eu/rest/v2/name/${this.props.match.params.slug}`;
         fetch(countryURL)
             .then((r) => r.json())
             .then(country => {this.setState({
@@ -31,6 +39,11 @@ class Activities extends Component {
     }
 
     render() {
+
+        // const { match, location, history } = this.props;
+        // console.log(this.props)
+        // console.log(this.props.match.params.slug)
+
         return (
             <div className="activity-container">
                 <WarningText/>
@@ -38,7 +51,7 @@ class Activities extends Component {
                     <img alt={`Flag of ${this.state.countryName}`} src={this.state.flag}/>
                     <h1>Activities in {this.state.countryName}</h1>
                     <p>Capital - {this.state.capital}</p>
-                    <p>Languages - {this.state.language}</p>
+                    <p>Language - {this.state.language}</p>
                     <p>Calling code - +{this.state.callingCode}</p>
                     <p>Currency - {this.state.currencySymbol} {this.state.currency}</p>
                 </div>
@@ -51,4 +64,4 @@ class Activities extends Component {
     }
 }
 
-export default Activities;
+export default withRouter(Activities);
