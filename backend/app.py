@@ -93,6 +93,7 @@ class Countries(db.Model):
 class Activities(db.Model):
     __tablename__ = 'activities'
     id = db.Column(db.Integer, primary_key=True)
+    country_id = db.Column(db.Integer)
     name = db.Column(db.String(200))
     category = db.Column(db.String(200))
     opening_hours = db.Column(db.String(200))
@@ -101,7 +102,8 @@ class Activities(db.Model):
     address = db.Column(db.String(300))
     phone_number = db.Column(db.String(30))
     
-    def __init__(self, name, category, opening_hours, price, provider, address, phone_number):
+    def __init__(self, country_id, name, category, opening_hours, price, provider, address, phone_number):
+        self.country_id = country_id
         self.name = name
         self.category = category
         self.opening_hours = opening_hours
@@ -113,7 +115,8 @@ class Activities(db.Model):
 # Likes table
 class Likes(db.Model):
     __tablename__ = 'likes'
-    user_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
     activity_id = db.Column(db.Integer)
     
     def __init__(self, user_id, activity_id):
@@ -121,13 +124,15 @@ class Likes(db.Model):
         self.activity_id = activity_id
         
 
+
+
 # Routes
 @app.route('/')
 def home():
     return 'Hello'
 
 
-# Sending encrypted password???
+# Authorisation and authentication routes
 @app.route('/signup', methods=['GET','POST'])
 def sign_up():
     if request.method == 'POST':
@@ -150,9 +155,7 @@ def sign_up():
                             recipients=["anna_tran@hotmail.co.uk"])
             msg.body = f"Please verify your email address by clicking on the link: {link}"
             mail.send(msg)
-            # return '<p>The email you have entered is {}'.format(email, token)
-
-            # Send mail for later
+        
             return jsonify({'success': 'Thanks for signing up!'})
         else:
             return jsonify({'failure': 'Email unavailable, please choose another'})
@@ -170,7 +173,6 @@ def confirm_email(token):
         user.confirmed = True
         db.session.commit()
     except SignatureExpired:
-        # return '<p>The e
         return render_template('expired.html')
     return render_template('confirmed.html')
 
@@ -198,7 +200,6 @@ def login():
                         'email': email
                     })
                     result = jsonify({'token': access_token})
-                    # result = jsonify({"success":"Successful login"})
                 else:
                     result = jsonify({"error":"Invalid username or password"})
             else: 
@@ -207,21 +208,7 @@ def login():
     return result
 
 
-# User profile route, protected
-@app.route('/dashboard', methods=['GET'])
-@jwt_required
-def profile():
-    current_user = get_jwt_identity()
-    email = current_user['email']
-    username = current_user['username']
-    user_id = db.session.query(Users).filter(Users.email == email).first().id
-    print(user_id)
-    print(user_id)
-    return jsonify({"username": username}), 200
 
-
-# Will take imput of an email address, send confirmation link to it, 
-# Confirmation link opens a password reset page (validation), then update database accordingly
 @app.route('/forgot_password', methods=['POST'])
 def forgot_password():
     if request.method == 'POST':
@@ -237,8 +224,7 @@ def forgot_password():
         return jsonify({"message": "Password reset link sent"})
 
 
-
-# Render a form to reset password, include validations
+# Include password validations later
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     email = serialiser.loads(token, salt='reset-password', max_age=3600)
@@ -256,5 +242,84 @@ def reset_password(token):
         return render_template('reset.html', form=form, token=token)
 
 
+
+# API ROUTES
+# User dashboard route
+@app.route('/dashboard', methods=['GET'])
+@jwt_required
+def dashboard():
+    current_user = get_jwt_identity()
+    email = current_user['email']
+    username = current_user['username']
+
+    # Get user's id and all their likes activities
+    user_id = db.session.query(Users).filter(Users.email == email).first().id
+    liked_activities = db.session.query(Likes).filter(Likes.user_id == user_id).all()
+
+    # Save activity_ids of user's liked activities
+    user_activities= []
+    for activity in liked_activities:
+        # user_activities_ids.append(activity.activity_id)
+        row = db.session.query(Activities).filter(Activities.id == activity.activity_id).first().__dict__
+        del row['_sa_instance_state']
+        user_activities.append(row)
+    
+    response = {
+        "username": username,
+        "user_activities":user_activities
+    }
+    return jsonify(response), 200
+
+
+# Admin route to add activities to database
+@app.route('/add_activity', methods=['POST'])
+@jwt_required
+def add_activity():
+    current_user = get_jwt_identity()
+    email = current_user['email']
+
+    if email == 'fplap4project@gmail.com':
+        country_id, name, category, opening_hours, price, provider, address, phone_number = request.get_json()['country_id'], request.get_json()['name'], request.get_json()['category'], request.get_json()['opening_hours'], request.get_json()['price'], request.get_json()['provider'], request.get_json()['address'], request.get_json()['phone_number']
+        data = Activities(country_id, name, category, opening_hours, price, provider, address, phone_number)
+        db.session.add(data)
+        db.session.commit()
+        return jsonify({"message":"Activity added successfully"})
+    else: 
+        return jsonify({"message":"This route is not accessible"})
+
+
+# Route to add activities to user's likes
+@app.route('/like_activity', methods=['POST'])
+@jwt_required
+def like_activity():
+    current_user = get_jwt_identity()
+    email = current_user['email']
+    user_id = db.session.query(Users).filter(Users.email == email).first().id
+    activity_id = request.get_json()['activity_id']
+
+    data = Likes(user_id, activity_id)
+    db.session.add(data)
+    db.session.commit()
+    return jsonify({"message": "Activity added to user's likes successfuly"})
+
+
+# Route to add activities to user's likes
+@app.route('/unlike_activity', methods=['POST'])
+@jwt_required
+def unlike_activity():
+    current_user = get_jwt_identity()
+    email = current_user['email']
+    user_id = db.session.query(Users).filter(Users.email == email).first().id
+    activity_id = request.get_json()['activity_id']
+
+    db.session.query(Likes).filter(Likes.user_id == user_id).filter(Likes.activity_id == activity_id).delete(synchronize_session=False)
+    db.session.commit()
+    return jsonify({"message": "Activity removed from user's likes successfuly"})
+
+# STILL TO DO
+# Add admin users and first user since db was dropped
+# Route to populate countries table
+# Route for countries/countryslug, basically filter activities by country
+# Route for countries/countryslug/categoryslug, basically filter activities by country then filter by category
 if __name__ == '__main__':
     app.run(debug=True)
