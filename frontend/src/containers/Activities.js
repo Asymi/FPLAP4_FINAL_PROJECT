@@ -5,7 +5,7 @@ import WarningText from '../components/WarningText'
 class Activities extends Component {
 
     state = {
-        chosenCountry: 'kiribati',
+        chosenCountry: 'algeria',
         countryName: '',
         capital: '',
         callingCode: '',
