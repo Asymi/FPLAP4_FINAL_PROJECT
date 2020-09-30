@@ -3,7 +3,7 @@ import { NavLink, withRouter, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logOut } from '../Actions/Actions'
 import SearchCard from './SearchCard'
-import './styles/NavBarStyle.css'
+// import './styles/NavBarStyle.css'
 
 class NavBar extends Component {
 

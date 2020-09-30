@@ -8,13 +8,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 class Activities extends Component {
 
     state = {
-        chosenCountry: '',
         countryName: '',
         capital: '',
         callingCode: '',
         timezone: '',
         currency: '',
-        languages: ''
+        languages: '',
+        country: ''
     };
 
     static propTypes = {
@@ -23,36 +23,24 @@ class Activities extends Component {
         history: PropTypes.object.isRequired,
     };
     
-    componentDidMount() {
+    getData = () => {
         const countryURL = `https://restcountries.eu/rest/v2/name/${this.props.match.params.slug}`;
         fetch(countryURL)
-            .then((r) => r.json())
-            .then(country => {this.setState({
-                countryName: country[0].name,
-                capital: country[0].capital,
-                callingCode: country[0].callingCodes,
-                currency: country[0].currencies[0].name,
-                currencySymbol: country[0].currencies[0].symbol,
-                language: country[0].languages[0].name,
-                flag: country[0].flag
-            })})
-            .catch(err => console.warn('Country not found!', err))
+        .then((r) => r.json())
+        .then(country => {this.setState({
+            countryName: country[0].name,
+            capital: country[0].capital,
+            callingCode: country[0].callingCodes,
+            currency: country[0].currencies[0].name,
+            currencySymbol: country[0].currencies[0].symbol,
+            language: country[0].languages[0].name,
+            flag: country[0].flag
+        })})
+        .catch(err => console.warn('Country not found!', err))
     }
 
-    componentDidUpdate() {
-        const countryURL = `https://restcountries.eu/rest/v2/name/${this.props.match.params.slug}`;
-        fetch(countryURL)
-            .then((r) => r.json())
-            .then(country => {this.setState({
-                countryName: country[0].name,
-                capital: country[0].capital,
-                callingCode: country[0].callingCodes,
-                currency: country[0].currencies[0].name,
-                currencySymbol: country[0].currencies[0].symbol,
-                language: country[0].languages[0].name,
-                flag: country[0].flag
-            })})
-            .catch(err => console.warn('Country not found!', err))
+    componentDidMount() {
+       this.setState({country: this.props.match.params.slug}, () => this.getData())
     }
 
     handleClick = e => {
@@ -60,6 +48,9 @@ class Activities extends Component {
     }
 
     render() {
+        if (this.state.country !== this.props.match.params.slug && this.state.country !== ''){
+            this.setState({country: this.props.match.params.slug}, () => this.getData())
+        }
         return (
             <div className="activity-container">
                 <WarningText/>

@@ -127,7 +127,10 @@ class Likes(db.Model):
 class Categories(db.Model):
     __tablename__ = 'categories'
     id = db.Column(db.Integer, primary_key=True)
-    category = db.Column(db.Integer)
+    category = db.Column(db.String(300))
+
+    def __init__(self, category):
+        self.category = category
 
 
 
@@ -271,7 +274,7 @@ def dashboard():
     
     response = {
         "username": username,
-        "user_activities":user_activities
+        "user_activities": user_activities
     }
     return jsonify(response), 200
 
@@ -284,8 +287,8 @@ def add_activity():
     email = current_user['email']
 
     if email == 'fplap4project@gmail.com':
-        country_id, name, category, opening_hours, price, provider, address, phone_number = request.get_json()['country_id'], request.get_json()['name'], request.get_json()['category'], request.get_json()['opening_hours'], request.get_json()['price'], request.get_json()['provider'], request.get_json()['address'], request.get_json()['phone_number']
-        data = Activities(country_id, name, category, opening_hours, price, provider, address, phone_number)
+        country, name, category, opening_hours, price, provider, address, phone_number = request.get_json()['country'], request.get_json()['name'], request.get_json()['category'], request.get_json()['opening_hours'], request.get_json()['price'], request.get_json()['provider'], request.get_json()['address'], request.get_json()['phone_number']
+        data = Activities(country, name, category, opening_hours, price, provider, address, phone_number)
         db.session.add(data)
         db.session.commit()
         return jsonify({"message":"Activity added successfully"})
@@ -342,7 +345,6 @@ def add_countries():
         return jsonify({"message":"This route is not accessible"})
 
 
-
 # Populate category table
 @app.route('/add_categories', methods=['GET'])
 @jwt_required
@@ -378,14 +380,28 @@ def countries():
 
 
 # Route for countries/countryslug, basically filter activities by country
-@app.route('/countries/<country>')
+@app.route('/countries/<country>', methods=['GET'])
 def country_activities(country):
+    country.replace("%20"," ")
     categories = ["Sights", "Arts", "Food", "Outdoors", "Sports", "Culture", "History"]
     
     response = []
     for category in categories:
-        print(db.session.query(Activities).filter(Activities.country == country).filter(Activities.category == category).all())
+        results = db.session.query(Activities).filter(Activities.country == country).filter(Activities.category == category).all()
+        
+        result_dict = {
+            "category": category,
+            "activities": []
+        }
 
+        for result in results:
+            row = result.__dict__
+            del row['_sa_instance_state']
+            result_dict["activities"].append(row)
+        
+        response.append(result_dict)
+        print(response)
+    return jsonify(response)
 
 # Route for countries/countryslug/categoryslug, basically filter activities by country then filter by category
 if __name__ == '__main__':
