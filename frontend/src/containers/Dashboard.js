@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 export class Dashboard extends Component {
+
     state = {
         username: ""
     }
@@ -8,18 +9,17 @@ export class Dashboard extends Component {
     token = localStorage.getItem('token')
 
     componentDidMount(){
+     
         const options = {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': "Bearer " + this.token
-            }
+            },
         }
 
         fetch('http://127.0.0.1:5000/dashboard', options)
-            .then(res => {
-                return res.json()
-            })
+            .then(res => res.json())
             .then(data => {
                 {this.setState({username: data.username})}
                 return data.username
