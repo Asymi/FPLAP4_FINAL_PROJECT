@@ -93,7 +93,7 @@ class Countries(db.Model):
 class Activities(db.Model):
     __tablename__ = 'activities'
     id = db.Column(db.Integer, primary_key=True)
-    country_id = db.Column(db.Integer)
+    country = db.Column(db.String)
     name = db.Column(db.String(200))
     category = db.Column(db.String(200))
     opening_hours = db.Column(db.String(200))
@@ -102,8 +102,8 @@ class Activities(db.Model):
     address = db.Column(db.String(300))
     phone_number = db.Column(db.String(30))
     
-    def __init__(self, country_id, name, category, opening_hours, price, provider, address, phone_number):
-        self.country_id = country_id
+    def __init__(self, country, name, category, opening_hours, price, provider, address, phone_number):
+        self.country = country
         self.name = name
         self.category = category
         self.opening_hours = opening_hours
@@ -152,7 +152,7 @@ def sign_up():
             link = url_for('confirm_email', token=token, _external=True)
             msg = Message(subject='Confirm Your Email Address',
                             sender=app.config.get('MAIL_USERNAME'),
-                            recipients=["anna_tran@hotmail.co.uk"])
+                            recipients=["yassine.benlamkadem@gmail.com"])
             msg.body = f"Please verify your email address by clicking on the link: {link}"
             mail.send(msg)
         
@@ -218,7 +218,7 @@ def forgot_password():
         link = url_for('reset_password', token=token, _external=True)
         msg = Message(subject='Reset Your Password',
                         sender=app.config.get('MAIL_USERNAME'),
-                        recipients=["anna_tran@hotmail.co.uk"])
+                        recipients=["yassine.benlamkadem@gmail.com"])
         msg.body = f"You are recieving this email because you requested to reset your password on. Click the link below to reset your password. If you did not request this, please ignore this message. {link}"
         mail.send(msg)
         return jsonify({"message": "Password reset link sent"})
@@ -316,10 +316,42 @@ def unlike_activity():
     db.session.commit()
     return jsonify({"message": "Activity removed from user's likes successfuly"})
 
-# STILL TO DO
-# Add admin users and first user since db was dropped
-# Route to populate countries table
+
+# Populate country table
+@app.route('/add_countries', methods=['GET'])
+@jwt_required
+def add_countries():
+    current_user = get_jwt_identity()
+    email = current_user['email']
+
+    if email == 'fplap4project@gmail.com':
+        countries = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua & Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia & Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Cape Verde","Cayman Islands","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cruise Ship","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kuwait","Kyrgyz Republic","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Mauritania","Mauritius","Mexico","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Namibia","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","Norway","Oman","Pakistan","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Saint Pierre & Miquelon","Samoa","San Marino","Satellite","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","South Africa","South Korea","Spain","Sri Lanka","St Kitts & Nevis","St Lucia","St Vincent","St. Lucia","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor L'Este","Togo","Tonga","Trinidad & Tobago","Tunisia","Turkey","Turkmenistan","Turks &amp; Caicos","Uganda","Ukraine","United Arab Emirates","United Kingdom","Uruguay","Uzbekistan","Venezuela","Vietnam","Virgin Islands (US)","Yemen","Zambia","Zimbabwe"]
+        
+        for country in countries:
+            data = Countries(country)
+            db.session.add(data)
+        db.session.commit()
+        return jsonify({"message": "Countries successfully added"})
+    else:
+        return jsonify({"message":"This route is not accessible"})
+
+
+# Route to get countries
+@app.route('/countries', methods=['GET'])
+def countries():
+    countries = db.session.query(Countries).all()
+
+    send_countries = []
+    for country in countries:
+        row = country.__dict__
+        del row['_sa_instance_state']
+        send_countries.append(row)
+
+    return jsonify(send_countries)
+
 # Route for countries/countryslug, basically filter activities by country
+
+
 # Route for countries/countryslug/categoryslug, basically filter activities by country then filter by category
 if __name__ == '__main__':
     app.run(debug=True)
