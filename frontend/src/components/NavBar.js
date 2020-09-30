@@ -14,7 +14,6 @@ class NavBar extends Component {
     onClickHandler = (e) => {
         localStorage.removeItem('token')
         this.props.setLoggedOut()
-        //props.history.push('/')
     }
 
     conditionalRender = () => {
@@ -31,7 +30,6 @@ class NavBar extends Component {
                 <div className='navbar'>
                 </div>
                 <nav>
-                    {/* <button className="search-btn">Search</button> */}
                     <SearchCard/>
                     <NavLink to='/about'>About</NavLink>
                     {this.conditionalRender()}
