@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import WarningText from '../components/WarningText'
+// import {SearchCard} from '../components/SearchCard'
 
 class Activities extends Component {
 
     state = {
-        chosenCountry: 'Vietnam',
+        chosenCountry: 'Japan',
         countryName: '',
         capital: '',
         callingCode: '',
