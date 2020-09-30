@@ -35,14 +35,8 @@ class Login extends Component {
 
         fetch('http://127.0.0.1:5000/login', options)
         .then(res => res.json())
-        .then(res => {
-            console.log(res)
-            return res
-        })
-        // Store key in localStorage, used in protected API routes
-        //.then(res => localStorage.setItem('token', res.token))
         .then(res => this.registerToken(res))
-        // .then(res => {this.props.history.push('/dashboard')})
+        //.then(res => {this.props.history.push('/dashboard')})
         .catch(err => console.warn("Something broke"))
     }
 
@@ -50,6 +44,7 @@ class Login extends Component {
         if (res.token) {
             this.props.setLoggedIn()
             localStorage.setItem('token', res.token)
+            console.log(res.token)
             toast.success("Login success")
         } else if (res.conf_error) {
             toast.error("Please confirm email address before logging in")
