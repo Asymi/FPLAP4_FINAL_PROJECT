@@ -124,7 +124,10 @@ class Likes(db.Model):
         self.activity_id = activity_id
 
 # Categories tables
-        
+class Categories(db.Model):
+    __tablename__ = 'categories'
+    id = db.Column(db.Integer, primary_key=True)
+    category = db.Column(db.Integer)
 
 
 
@@ -333,7 +336,29 @@ def add_countries():
             data = Countries(country)
             db.session.add(data)
         db.session.commit()
+
         return jsonify({"message": "Countries successfully added"})
+    else:
+        return jsonify({"message":"This route is not accessible"})
+
+
+
+# Populate category table
+@app.route('/add_categories', methods=['GET'])
+@jwt_required
+def add_categories():
+    current_user = get_jwt_identity()
+    email = current_user['email']
+
+    if email == 'fplap4project@gmail.com':
+        categories = ["Sights", "Arts", "Food", "Outdoors", "Sports", "Culture", "History"]
+
+        for category in categories:
+            data = Categories(category)
+            db.session.add(data)
+
+        db.session.commit()
+        return jsonify({"message": "Categories successfully added"})
     else:
         return jsonify({"message":"This route is not accessible"})
 
@@ -354,7 +379,12 @@ def countries():
 
 # Route for countries/countryslug, basically filter activities by country
 @app.route('/countries/<country>')
-def country_activities():
+def country_activities(country):
+    categories = ["Sights", "Arts", "Food", "Outdoors", "Sports", "Culture", "History"]
+    
+    response = []
+    for category in categories:
+        print(db.session.query(Activities).filter(Activities.country == country).filter(Activities.category == category).all())
 
 
 # Route for countries/countryslug/categoryslug, basically filter activities by country then filter by category
