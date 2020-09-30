@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
-import WarningText from '../components/WarningText'
-import ActivityCard from '../components/ActivityCard'
-
+import { WarningText, ActivityCard, ActivityResults } from '../components'
+import { faSkiing, faSkating, faSwimmer, faTheaterMasks,  faUtensils, faGlassMartiniAlt} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class Activities extends Component {
 
@@ -40,7 +40,11 @@ class Activities extends Component {
     }
 
     componentDidMount() {
-        this.setState({country: this.props.match.params.slug}, () => this.getData())
+       this.setState({country: this.props.match.params.slug}, () => this.getData())
+    }
+
+    handleClick = e => {
+        e.preventDefault()
     }
 
     render() {
@@ -52,7 +56,16 @@ class Activities extends Component {
                 <WarningText/>
                 <div className="countryInfo">
                     <img alt={`Flag of ${this.state.countryName}`} src={this.state.flag}/>
-                    <h1>Activities in {this.state.countryName}</h1>
+                    <h1>Categories in {this.state.countryName}</h1>
+                    <div className="todo-card">
+                        <button className="todo-icon"><FontAwesomeIcon icon={faUtensils}/>Dining</button>
+                        {this.state.showActivities ? this.showActivities() : null}
+                        <button className="todo-icon"><FontAwesomeIcon icon={faGlassMartiniAlt}/>Bars</button>
+                        <button className="todo-icon"><FontAwesomeIcon icon={faSkating}/>Skating</button>
+                        <button className="todo-icon"><FontAwesomeIcon icon={faSkiing}/>Skiing</button>
+                        <button className="todo-icon"><FontAwesomeIcon icon={faSwimmer}/>Water Sports</button>
+                        <button className="todo-icon"><FontAwesomeIcon icon={faTheaterMasks}/>Theatres and Shows</button>
+                    </div>
                     <p>Capital - {this.state.capital}</p>
                     <p>Language - {this.state.language}</p>
                     <p>Calling code - +{this.state.callingCode}</p>
@@ -60,9 +73,10 @@ class Activities extends Component {
                 </div>
 
                 <h1>Activities</h1>
-                <h3>Want to choose from a category instead?</h3>
-                <Link to="/categories">Choose a category</Link>
-                <ActivityCard/>
+                <h2>Looking for inspiration?</h2>
+                 <div className="inspiration-cards">
+                     {/* IMPORT CARDS */}
+                 </div>
             </div>
         )
     }
