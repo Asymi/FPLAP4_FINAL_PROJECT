@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
 import WarningText from '../components/WarningText'
+import ActivityCard from '../components/ActivityCard'
 
 class Activities extends Component {
 
@@ -42,7 +43,6 @@ class Activities extends Component {
 
         // const { match, location, history } = this.props;
         // console.log(this.props)
-        // console.log(this.props.match.params.slug)
 
         return (
             <div className="activity-container">
@@ -59,6 +59,7 @@ class Activities extends Component {
                 <h1>Activities</h1>
                 <h3>Want to choose from a category instead?</h3>
                 <Link to="/categories">Choose a category</Link>
+                <ActivityCard/>
             </div>
         )
     }
