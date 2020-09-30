@@ -6,10 +6,19 @@ import WarningText from '../components/WarningText'
 import './styles/CategoriesStyles.css'
 
 class Categories extends Component {
+
+    // GRAB DATA
+
+    state = {
+        country: 'China',
+        category: 'Food',
+    }
+    
     render() {
         return (
             <div className="categories-container">
                 <WarningText/>
+                <h4>{this.state.country} > {this.state.category}</h4>
                 <h2>What would you like to do?</h2>
                 <div className="todo-card">
                     <Link to='/' className="todo-icon"><FontAwesomeIcon icon={faUtensils}/>Dining</Link>
