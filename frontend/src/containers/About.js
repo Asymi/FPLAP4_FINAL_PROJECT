@@ -5,10 +5,10 @@ const About = () => {
     return(
         <div className="about-container">
             <div className="about-banner">
-                <img src="https://images.unsplash.com/photo-1571979935923-ec11d7cda5dc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1194&q=80" className="balloon"></img>
+                <img src="https://images.unsplash.com/photo-1571979935923-ec11d7cda5dc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1194&q=80" className="balloon" alt="balloon"></img>
                 <div className="about-headers">
-                    <h1 className='about-title'>Get to Know APP NAME</h1>
-                    <h2 className="about-subheading">Welcome to APP NAME. We are here wherever you are! We will always find the right fun activities for you to do!</h2>
+                    <h1 className='about-title'>Get to Know Find-Do</h1>
+                    <h2 className="about-subheading">Welcome to Find-Do. We are here wherever you are! We will always find the right fun activities for you to do!</h2>
                 </div>
             </div>
             <div className="about-text">

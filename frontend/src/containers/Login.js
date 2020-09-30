@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import { logIn } from '../Actions/Actions'
 import { connect } from 'react-redux'
 import { toast, ToastContainer } from 'react-toastify'
@@ -34,14 +35,8 @@ class Login extends Component {
 
         fetch('http://127.0.0.1:5000/login', options)
         .then(res => res.json())
-        .then(res => {
-            console.log(res)
-            return res
-        })
-        // Store key in localStorage, used in protected API routes
-        //.then(res => localStorage.setItem('token', res.token))
         .then(res => this.registerToken(res))
-        // .then(res => {this.props.history.push('/dashboard')})
+        //.then(res => {this.props.history.push('/dashboard')})
         .catch(err => console.warn("Something broke"))
     }
 
@@ -49,6 +44,7 @@ class Login extends Component {
         if (res.token) {
             this.props.setLoggedIn()
             localStorage.setItem('token', res.token)
+            console.log(res.token)
             toast.success("Login success")
         } else if (res.conf_error) {
             toast.error("Please confirm email address before logging in")
@@ -72,6 +68,7 @@ class Login extends Component {
                     <br/>
                     <input type="submit" value="login"></input>
                 </form>
+                <p>Not registered?</p><Link to="/signup">Sign up</Link>
             </div>
         )
     }
