@@ -36,11 +36,14 @@ class SearchCard extends Component {
             return null
         }
         return (
-            <ul>
-                {suggestions.map((item, index) => (
-                    <li key={index} onClick={() => this.selectedText(item)}>{item}</li>
-                ))}
-            </ul>
+            <div>
+                {/* <span>Suggestions({suggestions.length})</span> */}
+                <ul>
+                    {suggestions.slice(0, 5).map((item, index) => (
+                        <li key={index} onClick={() => this.selectedText(item)}>{item}</li>
+                    ))}
+                </ul>
+            </div>
         )
     }
     // state = {
@@ -72,12 +75,14 @@ class SearchCard extends Component {
 
 
     render() {
-        const { text, suggestions} = this.state
+        const { text } = this.state
+        
         return (
             <div>
                 <input type="text" onChange={this.onInputChange} value={text} placeholder="Search by Country"/>
                 {this.renderSuggestions()}
-                {/* <span>Suggestions: {suggestions.length}</span> */}
+                {/* <SearchCard data={this.state.text}/> */}
+                {/* <SearchResult data={this.state.text}/> */}
                 {/* HIDE BUTTON AFTER CLICK
                 <button onClick={() => this.setState({showForm: true})} >Search</button>
                 {this.state.showForm ? this.showForm() : null} */}
