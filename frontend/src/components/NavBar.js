@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { NavLink, withRouter, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logOut } from '../Actions/Actions'
+import SearchCard from './SearchCard'
+import './styles/NavBarStyle.css'
 
 class NavBar extends Component {
 
@@ -12,7 +14,6 @@ class NavBar extends Component {
     onClickHandler = (e) => {
         localStorage.removeItem('token')
         this.props.setLoggedOut()
-        //props.history.push('/')
     }
 
     conditionalRender = () => {
@@ -29,7 +30,7 @@ class NavBar extends Component {
                 <div className='navbar'>
                 </div>
                 <nav>
-                    {/* <NavLink to='/'>Search</NavLink> */}
+                    <SearchCard/>
                     <NavLink to='/about'>About</NavLink>
                     {this.conditionalRender()}
                     <NavLink to='/dashboard'>Profile</NavLink>

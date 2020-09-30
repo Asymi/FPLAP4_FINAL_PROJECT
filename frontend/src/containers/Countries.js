@@ -4,6 +4,7 @@ import { withRouter, Link } from 'react-router-dom'
 import WarningText from '../components/WarningText'
 import ActivityCard from '../components/ActivityCard'
 
+
 class Activities extends Component {
 
     state = {
@@ -40,10 +41,6 @@ class Activities extends Component {
     }
 
     render() {
-
-        // const { match, location, history } = this.props;
-        // console.log(this.props)
-
         return (
             <div className="activity-container">
                 <WarningText/>
@@ -66,3 +63,4 @@ class Activities extends Component {
 }
 
 export default withRouter(Activities);
+
