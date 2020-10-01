@@ -4,6 +4,7 @@ import { logIn } from '../Actions/Actions'
 import { connect } from 'react-redux'
 import { toast, ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
+import './styles/LoginStyle.css'
 
 class Login extends Component {
 
@@ -36,7 +37,7 @@ class Login extends Component {
         fetch('http://127.0.0.1:5000/login', options)
         .then(res => res.json())
         .then(res => this.registerToken(res))
-        //.then(res => {this.props.history.push('/dashboard')})
+        .then(res => {this.props.history.push('/dashboard')})
         .catch(err => console.warn("Something broke"))
     }
 
@@ -55,9 +56,9 @@ class Login extends Component {
 
     render() {
         return (
-            <div>
+            <div className="login-container">
                 <ToastContainer />
-                <form onSubmit={this.handleSumbmit}>
+                <form onSubmit={this.handleSumbmit} className="login-form">
                     <label htmlFor="email">Email</label>
                     <br/>
                     <input type="text" onChange={this.handleInput} name="email" placeholder="Enter your email"></input>
