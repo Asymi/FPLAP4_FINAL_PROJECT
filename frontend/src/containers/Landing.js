@@ -16,15 +16,12 @@ class Landing extends Component {
         return (
             <div className="landing-container">
                 <WarningText/>
-                <div className="profile-icon">
-                    <Link to='/dashboard'><FontAwesomeIcon icon={faUserCircle}/></Link>
-                 </div>
                 <div className="banner">
                     <img src="https://images.unsplash.com/photo-1517699418036-fb5d179fef0c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1191&q=80" alt="Surfing" className="surfing"></img>
                     <div className="banner-text">
-                        <h1>Go Wild</h1>
-                        <p>Experience the fun out there</p>
-                        <button onClick={this.handleClick}>Explore</button>
+                        <h1 className="banner-title">Go Wild</h1>
+                        <p className="banner-para">Experience the fun out there</p>
+                        <button onClick={this.handleClick} className="banner-btn">Explore</button>
                     </div>
                 </div>
                 <div className="featured-container">
