@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { withRouter, Link } from 'react-router-dom'
-import { WarningText, ActivityCard, ActivityResults } from '../components'
-import { faSkiing, faSkating, faSwimmer, faTheaterMasks,  faUtensils, faGlassMartiniAlt} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { withRouter } from 'react-router-dom'
+import { WarningText, ActivityResults } from '../components'
 
-class Activities extends Component {
-
+class Countries extends Component {
     state = {
         countryName: '',
         capital: '',
@@ -14,15 +11,14 @@ class Activities extends Component {
         timezone: '',
         currency: '',
         languages: '',
-        country: ''
+        country: '',
+        APIData: []
     };
-
     static propTypes = {
         match: PropTypes.object.isRequired,
         location: PropTypes.object.isRequired,
         history: PropTypes.object.isRequired,
     };
-    
     getData = () => {
         const countryURL = `https://restcountries.eu/rest/v2/name/${this.props.match.params.slug}`;
         fetch(countryURL)
@@ -38,17 +34,22 @@ class Activities extends Component {
         })})
         .catch(err => console.warn('Country not found!', err))
     }
-
     componentDidMount() {
-       this.setState({country: this.props.match.params.slug}, () => this.getData())
+        fetch(`http://127.0.0.1:5000/countries/${this.props.match.params.slug}`)
+        .then(res => res.json())
+        .then(res => this.setState({APIData: res}))
+        .catch(err => console.log(err))
+        this.setState({country: this.props.match.params.slug}, () => this.getData())
     }
-
     handleClick = e => {
         e.preventDefault()
     }
-
     render() {
         if (this.state.country !== this.props.match.params.slug && this.state.country !== ''){
+            fetch(`http://127.0.0.1:5000/countries/${this.props.match.params.slug}`)
+            .then(res => res.json())
+            .then(res => this.setState({APIData: res}))
+            .catch(err => console.log(err))
             this.setState({country: this.props.match.params.slug}, () => this.getData())
         }
         return (
@@ -57,30 +58,22 @@ class Activities extends Component {
                 <div className="countryInfo">
                     <img alt={`Flag of ${this.state.countryName}`} src={this.state.flag}/>
                     <h1>Categories in {this.state.countryName}</h1>
-                    <div className="todo-card">
-                        <button className="todo-icon"><FontAwesomeIcon icon={faUtensils}/>Dining</button>
-                        {this.state.showActivities ? this.showActivities() : null}
-                        <button className="todo-icon"><FontAwesomeIcon icon={faGlassMartiniAlt}/>Bars</button>
-                        <button className="todo-icon"><FontAwesomeIcon icon={faSkating}/>Skating</button>
-                        <button className="todo-icon"><FontAwesomeIcon icon={faSkiing}/>Skiing</button>
-                        <button className="todo-icon"><FontAwesomeIcon icon={faSwimmer}/>Water Sports</button>
-                        <button className="todo-icon"><FontAwesomeIcon icon={faTheaterMasks}/>Theatres and Shows</button>
-                    </div>
                     <p>Capital - {this.state.capital}</p>
                     <p>Language - {this.state.language}</p>
                     <p>Calling code - +{this.state.callingCode}</p>
                     <p>Currency - {this.state.currencySymbol} {this.state.currency}</p>
                 </div>
-
                 <h1>Activities</h1>
-                <h2>Looking for inspiration?</h2>
-                 <div className="inspiration-cards">
-                     {/* IMPORT CARDS */}
-                 </div>
+                    {this.state.APIData.map(catAndAct => {
+                        return (
+                            <div>
+                                <h2>{catAndAct.category}</h2>
+                                <ActivityResults results={catAndAct.activities} />
+                            </div>
+                        )
+                    })}
             </div>
         )
     }
 }
-
-export default withRouter(Activities);
-
+export default withRouter(Countries);
