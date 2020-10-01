@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import './styles/DashboardStyle.css'
 
 export class Dashboard extends Component {
 
@@ -32,7 +33,7 @@ export class Dashboard extends Component {
         return (
             <div className="dashboard-container">
                 <div className="saved-container">
-                <h1>Hi {this.state.username}</h1>
+                <h1 className="username">Hi {this.state.username}</h1>
                 <h2>Saved Activities</h2>
                     <div className="saved-cards">
                         {/* IMPORT SAVED ACTIVITIES */}
