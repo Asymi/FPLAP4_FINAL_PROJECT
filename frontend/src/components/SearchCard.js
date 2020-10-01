@@ -1,12 +1,20 @@
 import React, { Component } from 'react'
 import countries from './CountriesList'
 import { withRouter } from 'react-router-dom'
+import './styles/SearchCardStyle.css'
+import { FaSearch } from "react-icons/fa";
+
+
 
 class SearchCard extends Component {
 
     state = {
         suggestions: [],
         text:'',
+        hideButton: false,
+        flags: {
+            Afghanistan: '🇦🇫'
+        }
     }
 
     onInputChange = e => {
@@ -31,6 +39,11 @@ class SearchCard extends Component {
         this.setState({text: ""})
     }
 
+    getFlag(country) {
+        console.log(this.state.flags.Afghanistan)
+        return this.state.flags.country
+    }    
+
     renderSuggestions = () => {
         let { suggestions } = this.state
         if(suggestions.length === 0) {
@@ -40,21 +53,23 @@ class SearchCard extends Component {
             <div>
                 <ul>
                     {suggestions.slice(0, 5).map((item, index) => (
-                        <li key={index} onClick={() => this.selectedText(item)} className="country-list">{item}</li>
+                        <li key={index} onClick={() => this.selectedText(item)} className="country-list">{this.getFlag('Afghanistan')} - {item}</li>
                     ))}
                 </ul>
             </div>
         )
     }
 
+
     render() {
-        const { text } = this.state
+        const { text, hideButton } = this.state
         
         return (
-            <div>
-                <input type="text" onChange={this.onInputChange} value={text} placeholder="Search by Country"/>
-                {this.renderSuggestions()}
-            </div>
+            <>
+                <button onClick={()=> this.setState({hideButton: !hideButton})}><FaSearch/></button>
+                { this.state.hideButton ? <div><input type="text" onChange={this.onInputChange} value={text} placeholder="Search by Country 🌍"/>
+                {this.renderSuggestions()}</div> : null }
+            </>
         )
     }
 }
