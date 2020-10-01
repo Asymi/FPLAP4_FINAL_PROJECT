@@ -3,7 +3,9 @@ import { NavLink, withRouter, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { logOut } from '../Actions/Actions'
 import SearchCard from './SearchCard'
-// import './styles/NavBarStyle.css'
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import './styles/NavBarStyle.css'
 
 class NavBar extends Component {
 
@@ -18,22 +20,26 @@ class NavBar extends Component {
 
     conditionalRender = () => {
         if (this.props.loggedIn){
-            return <Link to="/" onClick={this.onClickHandler}>Logout</Link>
+            return <Link to="/" className="nav-logout nav" onClick={this.onClickHandler}>Logout</Link>
         } else {
-            return <NavLink to='/login'>Login</NavLink>
+            return <NavLink to='/login' className="nav-login nav">Login</NavLink>
+        }
+    }
+
+    profileAccess = () => {
+        if (this.props.loggedIn) {
+            return <Link to="/dashboard" className="nav-home nav"><FontAwesomeIcon icon={faUserCircle} className="profile-icon"/>Profile</Link>
         }
     }
 
     render() {
         return(
             <>
-                <div className='navbar'>
-                </div>
-                <nav>
+                <nav className="nav-container">
                     <SearchCard/>
-                    <NavLink to='/about'>About</NavLink>
+                    <NavLink to='/about' className="nav-about nav">About</NavLink>
                     {this.conditionalRender()}
-                    <NavLink to='/dashboard'>Profile</NavLink>
+                    {this.profileAccess()}
                 </nav>
             </>            
         )
