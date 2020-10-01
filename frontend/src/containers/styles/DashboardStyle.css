@@ -1,0 +1,13 @@
+.username {
+    font-size: 50px;
+    text-align: center;
+    margin: 30px;
+}
+
+.dashboard-container {
+    padding: 30px;
+}
+
+.dashboard-container h2 {
+    margin: 40px 0;
+}
