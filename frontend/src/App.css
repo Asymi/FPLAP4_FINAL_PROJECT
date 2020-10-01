@@ -1,4 +1,35 @@
+body {
+    overflow-x: hidden;
+}
+
 footer {
-    position: relative;
+    position: sticky;
     bottom:0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    background-color: rgb(199, 199, 199);
+    color: white;
+    margin-top: 100px;
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
+.logo-icon {
+    color: red;
+    font-size: 25px;
+    margin: 0px 05px 0 5px;
+}
+
+.logo {
+    color: black;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+.logo:hover {
+    text-decoration: none;
+    color: black;
 }
