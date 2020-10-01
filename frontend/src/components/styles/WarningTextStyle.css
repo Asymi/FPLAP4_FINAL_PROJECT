@@ -1,0 +1,18 @@
+.warning-banner {
+    width: 100vw;
+    height: 50px;
+    background-color: rgb(211, 129, 108);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.covid-text {
+    text-decoration: none;
+    color: white;
+}
+
+.covid-text:hover {
+    color: black;
+}

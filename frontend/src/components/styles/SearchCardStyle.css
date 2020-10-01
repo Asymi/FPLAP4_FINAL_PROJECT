@@ -1,0 +1,29 @@
+button {
+    border: 0;
+    background-color: white;
+}
+
+button:hover {
+    color: grey;
+}
+
+[type="text"] {
+    border-radius: 10px;
+    border: solid 2px gainsboro;
+    padding: 5px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    font-weight: bold;
+}
+
+li:hover {
+    cursor: pointer;
+    color: rgb(22, 129, 120);
+}

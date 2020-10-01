@@ -1,0 +1,21 @@
+.nav-container {
+    position: relative;
+    left: 100%;
+    transform: translateX(-50%);
+}
+
+.nav {
+    margin: 0px 20px;
+    color: black;
+}
+
+.nav:hover {
+    text-decoration: none;
+    color: black;
+}
+
+.profile-icon {
+    color: rgb(27, 143, 143);
+    font-size: 20px;
+    margin-right: 10px;
+}
