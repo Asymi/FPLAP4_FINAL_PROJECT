@@ -1,9 +1,28 @@
 .surfing {
-    width: 98vw;
-    opacity: 0.5;
+    width: 100vw;
+    opacity: 0.8;
 }
 
 .banner-text {
     position: absolute;
-    top: 20%;
+    left: 5%;
+    top: 35%;
+    color: white;
+}
+
+.banner-title {
+    font-size: 60px;
+}
+
+.banner-para {
+    font-size: 24px;
+}
+
+.banner-btn {
+    border: 1px solid transparent;
+    background-color: rgb(159, 209, 209);
+    color: white;
+    font-weight: bold;
+    padding: 10px 35px;
+    border-radius: 15px;
 }
