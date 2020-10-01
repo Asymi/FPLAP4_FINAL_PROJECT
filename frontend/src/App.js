@@ -19,7 +19,7 @@ class App extends Component{
     return (
       <div className="App">
         <div className="logo-icon">
-            <Link to='/'><FontAwesomeIcon icon={faMapMarkerAlt}/>Find-Do</Link>
+            <Link to='/' className="logo"><FontAwesomeIcon className="logo-icon" icon={faMapMarkerAlt}/>Find-Do</Link>
         </div>
         <NavBar></NavBar>
         <Switch>
@@ -35,7 +35,7 @@ class App extends Component{
           <Route component={NotFound404}/>
         </Switch>
         <footer>
-          &copy; 2020 Find-Do All rights reserved.
+          <span className="bold-text">&copy; 2020 Find-Do</span> All rights reserved.
         </footer>
       </div>
     )
