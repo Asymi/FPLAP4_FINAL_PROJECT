@@ -28,7 +28,8 @@ class NavBar extends Component {
 
     profileAccess = () => {
         if (this.props.loggedIn) {
-            return <Link to="/dashboard" className="nav-home nav"><FontAwesomeIcon icon={faUserCircle} className="profile-icon"/>Profile</Link>
+            return <div className="nav-profile">
+            <Link to="/dashboard" className="nav-home nav"><FontAwesomeIcon icon={faUserCircle} className="profile-icon"/>Profile</Link></div>
         }
     }
 
