@@ -1,0 +1,62 @@
+.countryInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 50px;
+    width: 80%;
+    /* border: solid 2px grey; */
+    border-radius: 20px;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 20px;
+    -webkit-box-shadow: 2px 2px 39px 0px rgba(0,0,0,0.29);
+    -moz-box-shadow: 2px 2px 39px 0px rgba(0,0,0,0.29);
+    box-shadow: 2px 2px 39px 0px rgba(0,0,0,0.29);
+}
+
+.countryText {
+    padding: 10px;
+    width: 100%;
+}
+
+.countryText p {
+    color: grey;
+}
+
+.countryTextData {
+    color: black;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.grey {
+    color: grey;
+}
+
+.countryFlag {
+    width: 500px;
+    height: auto;
+    border-radius: 5%;
+    margin-right: 50px;
+}
+
+.countryName {
+    font-weight: 600;
+    text-align: center;
+    
+    background: linear-gradient(to right, red, rgb(224, 215, 79));
+    background-size: 150% auto;
+    
+    color: #000;
+    background-clip: text;
+    /* text-fill-color: transparent; */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    animation: shine 2s linear infinite;
+    @keyframes shine {
+      to {
+        background-position: 200% center;
+      }
+    }
+  }

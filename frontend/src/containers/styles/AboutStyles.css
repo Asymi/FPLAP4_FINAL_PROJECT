@@ -23,3 +23,13 @@
     font-size: 20px;
     width: 400px;
 }
+
+.about-text {
+    padding: 30px;
+}
+
+.about-us {
+    font-size: 40px;
+    text-align: center;
+    margin: 20px;
+}
