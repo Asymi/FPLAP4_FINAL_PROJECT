@@ -14,7 +14,8 @@ class Activities extends Component {
         timezone: '',
         currency: '',
         languages: '',
-        country: ''
+        country: '',
+        APIData: []
     };
 
     static propTypes = {
@@ -40,7 +41,11 @@ class Activities extends Component {
     }
 
     componentDidMount() {
-       this.setState({country: this.props.match.params.slug}, () => this.getData())
+        fetch(`http://127.0.0.1:5000/countries/${this.props.match.params.slug}`)
+        .then(res => res.json())
+        .then(res => this.setState({APIData: res}))
+        .catch(err => console.log(err))
+        this.setState({country: this.props.match.params.slug}, () => this.getData())
     }
 
     handleClick = e => {
@@ -49,6 +54,10 @@ class Activities extends Component {
 
     render() {
         if (this.state.country !== this.props.match.params.slug && this.state.country !== ''){
+            fetch(`http://127.0.0.1:5000/countries/${this.props.match.params.slug}`)
+            .then(res => res.json())
+            .then(res => this.setState({APIData: res}))
+            .catch(err => console.log(err))
             this.setState({country: this.props.match.params.slug}, () => this.getData())
         }
         return (
@@ -73,6 +82,14 @@ class Activities extends Component {
                 </div>
 
                 <h1>Activities</h1>
+                    {this.state.APIData.map(catAndAct => {
+                        return (
+                            <div>
+                                <h2>{catAndAct.category}</h2>
+                                <ActivityResults results={catAndAct.activities} />
+                            </div>
+                        )
+                    })}
                 <h2>Looking for inspiration?</h2>
                  <div className="inspiration-cards">
                      {/* IMPORT CARDS */}

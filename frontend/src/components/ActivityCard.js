@@ -5,6 +5,7 @@ import axios from 'axios'
 
 function ActivityCard() {
     const [ results, setResults ]  = useState([])
+
     const showData = () => {
         axios.get(`http://localhost:8000/countries/kiribati`)
             .then(function (response) {

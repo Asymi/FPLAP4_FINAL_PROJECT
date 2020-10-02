@@ -295,6 +295,22 @@ def add_activity():
     else: 
         return jsonify({"message":"This route is not accessible"})
 
+# Route to check if an activity is liked
+@app.route('/is_liked', methods=['POST'])
+@jwt_required
+def is_liked():
+    activity_id = request.get_json()['activity_id']
+    current_user = get_jwt_identity()
+
+    email = current_user['email']
+    user_id = db.session.query(Users).filter(Users.email == email).first().id
+
+    search_result = db.session.query(Likes).filter(Likes.user_id == user_id).filter(Likes.activity_id == activity_id).first()
+    if search_result:
+        result = True
+    else: 
+        result = False
+    return jsonify({"user_likes": result })
 
 # Route to add activities to user's likes
 @app.route('/like_activity', methods=['POST'])
