@@ -1,7 +1,8 @@
-.nav-container {
+/* .nav-container {
     position: relative;
     left: 100%;
     transform: translateX(-50%);
+    margin-bottom: 20px;
 }
 
 .nav {
@@ -12,6 +13,57 @@
 .nav:hover {
     text-decoration: none;
     color: black;
+}
+
+.profile-icon {
+    color: rgb(27, 143, 143);
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.nav-about, .nav-profile, .nav-login,.nav-logout, .nav-search {
+    position: absolute;
+    top: -20px;
+}
+
+.nav-about {
+    left: 180px;
+}
+
+.nav-login, .nav-logout {
+    left: 280px;
+}
+
+.nav-profile {
+    left: 380px;
+} */
+
+.App {
+    margin-top: 10px;
+}
+
+.nav-container {
+    /* position: relative; */
+    /* left: 100%;
+    transform: translateX(-50%); */
+    margin: 0 auto;
+    display: flex;
+    width: 40%;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.nav {
+    margin: 0px 20px;
+    color: black;
+    font-weight: bold;
+}
+
+.nav:hover {
+    text-decoration: none;
+    color: grey;
 }
 
 .profile-icon {

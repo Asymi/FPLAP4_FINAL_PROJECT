@@ -21,9 +21,28 @@ ul {
 
 li {
     font-weight: bold;
+    list-style: none;
+    color: black;
 }
 
 li:hover {
     cursor: pointer;
     color: rgb(22, 129, 120);
+}
+
+
+.search-btn {
+    position: absolute;
+    left: 70px;
+    top: -20px;
+    background-color: transparent;
+}
+
+.search-field {
+    position: absolute;
+    left: -140px;
+    /* top: px; */
+    border:1px solid rgb(202, 202, 202);
+    border-radius: 2rem;
+    padding: 0 30px;
 }

@@ -1,7 +1,9 @@
 .warning-banner {
     width: 100vw;
     height: 50px;
-    background-color: rgb(211, 129, 108);
+    /* background-color: rgb(211, 129, 108); */
+    background: linear-gradient(to right, red, rgb(224, 215, 79));
+    background-size: 150% auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,5 +16,5 @@
 }
 
 .covid-text:hover {
-    color: black;
+    color: white;
 }
