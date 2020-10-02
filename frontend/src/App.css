@@ -3,14 +3,14 @@ body {
 }
 
 footer {
-    position: sticky;
-    bottom:0;
+    position: relative;
+    bottom: 0;
     width: 100%;
     text-align: center;
     padding: 10px;
     background-color: rgb(199, 199, 199);
     color: white;
-    margin-top: 100px;
+    margin-top: 400px;
 }
 
 .bold-text {
@@ -20,7 +20,9 @@ footer {
 .logo-icon {
     color: red;
     font-size: 25px;
-    margin: 0px 05px 0 5px;
+    margin: 0px 5px 0 5px;
+    position: relative;
+    top: 5px;
 }
 
 .logo {
