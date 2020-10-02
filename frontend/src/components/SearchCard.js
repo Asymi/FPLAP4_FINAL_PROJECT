@@ -37,12 +37,7 @@ class SearchCard extends Component {
         }))
         this.props.history.push(`/countries/${value}`)
         this.setState({text: ""})
-    }
-
-    getFlag(country) {
-        console.log(this.state.flags.Afghanistan)
-        return this.state.flags.country
-    }    
+    }  
 
     renderSuggestions = () => {
         let { suggestions } = this.state
@@ -53,7 +48,7 @@ class SearchCard extends Component {
             <div>
                 <ul>
                     {suggestions.slice(0, 5).map((item, index) => (
-                        <li key={index} onClick={() => this.selectedText(item)} className="country-list">{this.getFlag('Afghanistan')} - {item}</li>
+                        <li key={index} onClick={() => this.selectedText(item)} className="country-list"> • {item}</li>
                     ))}
                 </ul>
             </div>
