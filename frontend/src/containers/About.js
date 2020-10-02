@@ -12,7 +12,8 @@ const About = () => {
                 </div>
             </div>
             <div className="about-text">
-               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+               <h2 className="about-us">About Us</h2>
+               <p className="about-text">Have you ever been abroad not knowing what to do? Find-do is a travel companion for finding interesting activities to partake in across different countries. The activities are sorted into different categories (such as "culinary" or "extreme sports") for ease of search. Essential information is also displayed for each country such as currencies, languages and calling codes. Users can create accounts to save their favourite activities and post reviews.</p>
             </div>
         </div>
     )

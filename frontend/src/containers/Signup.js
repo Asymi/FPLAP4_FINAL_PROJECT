@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
+import './styles/SignupStyle.css'
 
 class Signup extends Component {
 
@@ -56,24 +57,24 @@ class Signup extends Component {
 
     render() {
         return (
-            <div>
+            <div className="signup-container">
                 <ToastContainer />
-                <form onSubmit={this.handleSumbmit}>
+                <form onSubmit={this.handleSumbmit} className="signup-form">
                     <label htmlFor="username">Username</label>
                     <br/>
-                    <input type="text" onChange={this.handleInput} name="username" placeholder="Enter a username"></input>
+                    <input type="text" onChange={this.handleInput} name="username" placeholder="Enter a username" className="input-field"></input>
                     <br/>
                     <label htmlFor="email">Email</label>
                     <br/>
-                    <input type="text" onChange={this.handleInput} name="email" placeholder="Enter your email"></input>
+                    <input type="text" onChange={this.handleInput} name="email" placeholder="Enter your email" className="input-field"></input>
                     <br/>
                     <label htmlFor="password">Password</label>
                     <br/>
-                    <input type="password" onChange={this.handleInput} name="password" placeholder="Enter your password"></input>
+                    <input type="password" onChange={this.handleInput} name="password" placeholder="Enter your password" className="input-field"></input>
                     <br/>
-                    <input type="submit" value="Sign Up"></input>
+                    <input type="submit" value="Sign Up" className="singup-btn"></input>
                 </form>
-                <p>Already have an account?</p><Link to="/login">Log in</Link>
+                <p className="reg">Already have an account?</p><Link to="/login" className="login-link">Log In</Link>
             </div>
         )
     }

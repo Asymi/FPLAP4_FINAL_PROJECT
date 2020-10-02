@@ -2,6 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { WarningText, ActivityResults } from '../components'
+import './styles/CountriesStyles.css'
+import { MdLocationOn, MdLanguage, MdPhone, MdCreditCard } from "react-icons/md";
+
+
+
 
 class Countries extends Component {
     state = {
@@ -53,20 +58,22 @@ class Countries extends Component {
             this.setState({country: this.props.match.params.slug}, () => this.getData())
         }
         return (
-            <div className="activity-container">
-                <WarningText/>
+            <div className="countriesComponent">
                 <div className="countryInfo">
-                    <img alt={`Flag of ${this.state.countryName}`} src={this.state.flag}/>
-                    <h1>Categories in {this.state.countryName}</h1>
-                    <p>Capital - {this.state.capital}</p>
-                    <p>Language - {this.state.language}</p>
-                    <p>Calling code - +{this.state.callingCode}</p>
-                    <p>Currency - {this.state.currencySymbol} {this.state.currency}</p>
+                    <img alt={`Flag of ${this.state.countryName}`} src={this.state.flag} className="countryFlag"/>
+                    <div className="countryText">
+                        <h1>Things to know about <span className="countryName">{this.state.countryName}</span></h1>
+                        <p>Capital <MdLocationOn/> <span className="countryTextData">{this.state.capital}</span></p>
+                        <p>Language <MdLanguage/> <span className="countryTextData">{this.state.language}</span></p>
+                        <p>Calling code <MdPhone/> +<span className="countryTextData">{this.state.callingCode}</span></p>
+                        <p>Currency <MdCreditCard/> <span className="countryTextData">{this.state.currencySymbol} {this.state.currency}</span> </p>
+                    </div>
+                    
                 </div>
-                <h1>Activities</h1>
+                {/* <h1>Activities</h1> */}
                     {this.state.APIData.map(catAndAct => {
                         return (
-                            <div>
+                            <div className="activity-container">
                                 <h2>{catAndAct.category}</h2>
                                 <ActivityResults results={catAndAct.activities} />
                             </div>
