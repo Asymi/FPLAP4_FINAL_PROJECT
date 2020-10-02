@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
+import { ActivityResults } from '../components'
 
 export class Dashboard extends Component {
 
     state = {
-        username: ""
+        username: "",
+        activities: []
     }
 
     token = localStorage.getItem('token')
@@ -20,9 +22,11 @@ export class Dashboard extends Component {
 
         fetch('http://127.0.0.1:5000/dashboard', options)
             .then(res => res.json())
-            .then(data => {
-                {this.setState({username: data.username})}
-                return data.username
+            .then(res => {
+                {this.setState({
+                    username: res.username,
+                    activities: res.user_activities
+                })}
             })
             .catch(err => console.warn('Username not printed'))
     }
@@ -32,16 +36,9 @@ export class Dashboard extends Component {
         return (
             <div className="dashboard-container">
                 <div className="saved-container">
-                <h1>Hi {this.state.username}</h1>
-                <h2>Saved Activities</h2>
+                <h2>Your Liked Activities</h2>
                     <div className="saved-cards">
-                        {/* IMPORT SAVED ACTIVITIES */}
-                    </div>
-                </div>
-                <div className="saved-container">
-                <h2>Your Activities</h2>
-                    <div className="saved-cards">
-                        {/* IMPORT SAVED ACTIVITIES */}
+                        <ActivityResults results={this.state.activities} />
                     </div>
                 </div>
             </div>
